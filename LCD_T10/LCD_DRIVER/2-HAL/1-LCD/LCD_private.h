@@ -18,8 +18,20 @@
 #define DISPLAY_CLEAR_4_BIT   0b00000001
 #define ENTRY_MOOD_SET_4_BIT  0b00000110
 
+#define DISPLAY_CLEAR                0x01
+#define Cursor_at_home_position      0x80
+
 #define LCD_u8_MODE_8_BIT  0
 #define LCD_u8_MODE_4_BIT  1
+
+#define ADDRESS_OF_CGRAM             0x40
+#define MAX_CHARACTERS                8
+
+
+#define POWER_ON                   30
+#define WAIT_FOR_MORE_THAN_40us   40
+#define WAIT_FOR_MORE_THAN_2ms     2
+
 
 
 
