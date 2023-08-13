@@ -2,15 +2,15 @@
 /******* Name : menna allah mohamed ******/
 /********** Date : 08 / 07 / 2023 ********/
 /**************** SWC : KPD**************/
-/*************  Version : 1.0 ************/
+/*************Â  Version : 1.0 ************/
 /*****************************************/
 
 /*Lib Layer*/
-#include "../../5-LIBRARIES/STD_TYPES.h"
-#include "../../5-LIBRARIES/ES.h"
+#include "../../Lib/STD_TYPES.h"
+#include "../../Lib/ES.h"
 
 /*MCAL*/
-#include "../../1-MCAL/1-DIO/DIO_interface.h"
+#include "../../MCAL/DIO/DIO_interface.h"
 
 /*HAL*/
 #include "KPD_private.h"
@@ -20,74 +20,88 @@
 #define F_CPU 8000000UL
 #include <util/delay.h>
 
+ 
+const u8 KPD_Au8Keys[4][4]=  KEYPAD_KEYS;
 
-const u8 KPD_Au8Keys[4][4]= KPD_KEYS ;
+const u8 KPD_Au8RowsPins[4] = {KPD_u8_R1_PIN,KPD_u8_R2_PIN,KPD_u8_R3_PIN,KPD_u8_R4_PIN};
+const u8 KPD_Au8ColsPins[4] = {KPD_u8_c1_PIN,KPD_u8_c2_PIN,KPD_u8_c3_PIN,KPD_u8_c4_PIN};
 
-
-const u8 KPD_Au8RowsPins[4] = {KPD_u8_R1_PIN,KPD_u8_R2_PIN,KPD_u8_R3_PIN,KPD_u8_R1_PIN};
-const u8 KPD_Au8ColsPins[4] = {KPD_u8_C1_PIN,KPD_u8_C2_PIN,KPD_u8_C3_PIN,KPD_u8_C4_PIN};
-
-/*****************************************************/
-ERROR KPD_enuInit(void)
-{
-	DIO_u8SetPinDirection(KPD_u8_PORT, KPD_u8_C1_PIN, DIO_u8_OUTPUT);
-	DIO_u8SetPinDirection(KPD_u8_PORT, KPD_u8_C2_PIN, DIO_u8_OUTPUT);
-	DIO_u8SetPinDirection(KPD_u8_PORT, KPD_u8_C3_PIN, DIO_u8_OUTPUT);
-	DIO_u8SetPinDirection(KPD_u8_PORT, KPD_u8_C4_PIN, DIO_u8_OUTPUT);
-
-	DIO_u8SetPinValue(KPD_u8_PORT, KPD_u8_C1_PIN, DIO_u8_HIGH);
-	DIO_u8SetPinValue(KPD_u8_PORT, KPD_u8_C2_PIN, DIO_u8_HIGH);
-	DIO_u8SetPinValue(KPD_u8_PORT, KPD_u8_C3_PIN, DIO_u8_HIGH);
-	DIO_u8SetPinValue(KPD_u8_PORT, KPD_u8_C4_PIN, DIO_u8_HIGH);
-
-	DIO_u8SetPinDirection(KPD_u8_PORT, KPD_u8_R1_PIN, DIO_u8_INPUT);
-	DIO_u8SetPinDirection(KPD_u8_PORT, KPD_u8_R2_PIN, DIO_u8_INPUT);
-	DIO_u8SetPinDirection(KPD_u8_PORT, KPD_u8_R3_PIN, DIO_u8_INPUT);
-	DIO_u8SetPinDirection(KPD_u8_PORT, KPD_u8_R4_PIN, DIO_u8_INPUT);
-
-	DIO_u8SetPinValue(KPD_u8_PORT, KPD_u8_R1_PIN, DIO_u8_HIGH);
-	DIO_u8SetPinValue(KPD_u8_PORT, KPD_u8_R2_PIN, DIO_u8_HIGH);
-	DIO_u8SetPinValue(KPD_u8_PORT, KPD_u8_R3_PIN, DIO_u8_HIGH);
-	DIO_u8SetPinValue(KPD_u8_PORT, KPD_u8_R4_PIN, DIO_u8_HIGH);
-
-	return STD_OK;
-}
 /****************************************************/
 ERROR KPD_enuGetKeyState(u8 *copy_pu8ReturnedKey){
 
 
-	u8 Local_u8ColIter;
-	u8 Local_u8RowIter;
-	u8 Local_u8KeyValue;
-
-	for(Local_u8ColIter = 0 ; Local_u8ColIter < 4 ; Local_u8ColIter++)
+	u8 Local_u8RowsCount;
+	u8 Local_u8ColsCount;
+	u8 Local_u8KeyValue = 0;
+	u8 Local_u8_Flag = 0 ;
+    
+	if (copy_pu8ReturnedKey != NULL)
 	{
-		DIO_u8SetPinValue(KPD_u8_PORT ,KPD_Au8ColsPins[Local_u8ColIter],DIO_u8_LOW);
-		for(Local_u8RowIter = 0 ; Local_u8RowIter < 4; Local_u8RowIter++ )
+		*copy_pu8ReturnedKey = NO_KEY_PRESSED ;
+		for(Local_u8RowsCount = 0 ; Local_u8RowsCount < 4 ; Local_u8RowsCount++)
 		{
-			DIO_u8GetPinValue(KPD_u8_PORT ,KPD_Au8RowsPins[Local_u8RowIter], &Local_u8KeyValue);
-			if(!Local_u8KeyValue)
+			DIO_enuSetPinValue(KPD_u8_PORT ,KPD_Au8RowsPins[Local_u8RowsCount],DIO_u8LOW);
+			 /*Check Which Input Pin Has Zero*/
+			for(Local_u8ColsCount = 0 ; Local_u8ColsCount < 4; Local_u8ColsCount++ )
 			{
-
-				_delay_ms(10);
-				DIO_u8GetPinValue(KPD_u8_PORT ,KPD_Au8RowsPins[Local_u8RowIter], &Local_u8KeyValue);
-				if(!Local_u8KeyValue)
+				DIO_enuGetPinValue(KPD_u8_PORT ,KPD_Au8ColsPins[Local_u8ColsCount], &Local_u8KeyValue);
+				if(Local_u8KeyValue == DIO_u8LOW)
 				{
-					while(!Local_u8KeyValue)
+					_delay_ms(10);
+					DIO_enuGetPinValue(KPD_u8_PORT ,KPD_Au8ColsPins[Local_u8ColsCount], &Local_u8KeyValue);
+					while(Local_u8KeyValue == DIO_u8LOW)
 					{
-						DIO_u8GetPinValue(KPD_u8_PORT ,KPD_Au8RowsPins[Local_u8RowIter], &Local_u8KeyValue);
+						DIO_enuGetPinValue(KPD_u8_PORT ,KPD_Au8ColsPins[Local_u8ColsCount], &Local_u8KeyValue);
 					}
-					const u8 KPD_Au8Keys[4][4] = KPD_KEYS;
-					*copy_pu8ReturnedKey = KPD_Au8Keys[Local_u8RowIter][Local_u8ColIter];// return the pressed key to the required variable
-
-					return STD_OK;
+					*copy_pu8ReturnedKey = KPD_Au8Keys[Local_u8RowsCount][Local_u8ColsCount];// return the pressed key to the required variable
+                     Local_u8_Flag = 1 ;
+					 break ;
 				}
 			}
+			DIO_enuSetPinValue(KPD_u8_PORT ,KPD_Au8RowsPins[Local_u8RowsCount],DIO_u8HIGH);
+			if(Local_u8_Flag == 1)
+			{
+				break ;
+			}
 		}
-		DIO_u8SetPinValue(KPD_u8_PORT ,KPD_Au8ColsPins[Local_u8ColIter],DIO_u8_HIGH);
-		*copy_pu8ReturnedKey = KPD_u8_KEY_NOT_PRESSED;
+	}
+	else 
+	{
+		return STD_NOTOK ;
+	}
+	return STD_OK ;
+}
+			
+			
+
+
+/********************************************************/
+
+	
+	ERROR KPD_enuInit(void)
+	{
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c1_PIN, DIO_u8INPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c2_PIN, DIO_u8INPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c3_PIN, DIO_u8INPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c4_PIN, DIO_u8INPUT);
+
+		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_c1_PIN, DIO_u8HIGH);
+		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_c2_PIN, DIO_u8HIGH);
+		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_c3_PIN, DIO_u8HIGH);
+		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_c4_PIN, DIO_u8HIGH);
+
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R1_PIN, DIO_u8OUTPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R2_PIN, DIO_u8OUTPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R3_PIN, DIO_u8OUTPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R4_PIN, DIO_u8OUTPUT);
+
+		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_R1_PIN, DIO_u8HIGH);
+		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_R2_PIN, DIO_u8HIGH);
+		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_R3_PIN, DIO_u8HIGH);
+		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_R4_PIN, DIO_u8HIGH);
+
+		return STD_OK;
 	}
 
-	return STD_NOTOK;
 
-}
+
