@@ -14,10 +14,10 @@
 /*HAL*/
 #include "LCD_private.h"
 #include "LCD_config.h"
-#include "LCD_interface.h"
+//#include "LCD_interface.h"
 
 #define F_CPU 8000000UL
-#include<util/delay.h>
+#include <util/delay.h>
 
 /************************************************/
  ERROR LCD_enuSendCmnd(u8 Copy_u8Cmdn)
@@ -78,25 +78,36 @@
 
  ERROR LCD_enuInit(void)
  {
+
+	 	DIO_u8SetPinDirection(LCD_u8_RS_PORT, LCD_u8_RS_PIN, DIO_u8_OUTPUT);
+	 	DIO_u8SetPinDirection(LCD_u8_RW_PORT, LCD_u8_RW_PIN, DIO_u8_OUTPUT);
+	 	DIO_u8SetPinDirection(LCD_u8_E_PORT, LCD_u8_E_PIN, DIO_u8_OUTPUT);
+	 	DIO_u8SetPortDirection(LCD_u8_DATA_PORT,DIO_u8_OUTPUT);
+	 	DIO_u8SetPortValue (LCD_u8_DATA_PORT ,DIO_u8_LOW  ) ;
+
+	 	DIO_u8SetPinValue(LCD_u8_RS_PORT,LCD_u8_RS_PIN,DIO_u8_LOW);
+	 	DIO_u8SetPinValue(LCD_u8_RW_PORT,LCD_u8_RW_PIN,DIO_u8_LOW);
+	 	DIO_u8SetPinValue(LCD_u8_E_PORT,LCD_u8_E_PIN,DIO_u8_LOW);
+
 #if  (LCD_u8_MODE == LCD_u8_MODE_8_BIT)
- 	_delay_ms(35);
+ 	_delay_ms( POWER_ON  );
  	LCD_enuSendCmnd(FUN_SET_8_BIT );
- 	_delay_us(40);
+ 	_delay_us( WAIT_FOR_MORE_THAN_40us );
  	LCD_enuSendCmnd(DISPLAY_ON_OFF_8_BIT);
- 	_delay_us(40);
+ 	_delay_us( WAIT_FOR_MORE_THAN_40us );
  	LCD_enuSendCmnd(DISPLAY_CLEAR_8_BIT);
- 	_delay_ms(2);
+ 	_delay_ms(WAIT_FOR_MORE_THAN_2ms);
  	LCD_enuSendCmnd(ENTRY_MOOD_SET_8_BIT);
  	return STD_OK;
 
 #elif  (LCD_u8_MODE == LCD_u8_MODE_4_BIT)
- 	_delay_ms(30);
+ 	_delay_ms( POWER_ON  );
  	LCD_enuSendCmnd(FUN_SET_4_BIT);
- 	_delay_us(40);
+ 	_delay_us( WAIT_FOR_MORE_THAN_40us );
  	LCD_enuSendCmnd(DISPLAY_ON_OFF_4_BIT);
- 	_delay_us(40);
+ 	_delay_us( WAIT_FOR_MORE_THAN_40us );
  	LCD_enuSendCmnd(DISPLAY_CLEAR_4_BIT);
- 	_delay_ms(2);
+ 	_delay_ms(WAIT_FOR_MORE_THAN_2ms);
  	LCD_enuSendCmnd(ENTRY_MOOD_SET_4_BIT);
  	return STD_OK;
  	#endif
@@ -186,23 +197,27 @@
      return  STD_OK;
  }
  /*******************************************************/
- /*ERROR  LCD_enu_SendNum(u32 Copy_u32Num)*/
- ERROR LCD_enuClear(void){
-	 LCD_enuSendCmnd(0x01);
+
+ ERROR LCD_enuClear(void)
+ {
+	 LCD_enuSendCmnd(DISPLAY_CLEAR);
+	 _delay_ms(1);
 	 return  STD_OK;
 
  }
+ 
+ /**********************************************************/
 
  ERROR LCD_enuCreateCustomChar(u8 Copy_u8Location, u8 *Copy_pu8CharArray)
  {
-     if (Copy_pu8CharArray != NULL && Copy_u8Location < 8)
+     if (Copy_pu8CharArray != NULL && Copy_u8Location < MAX_CHARACTERS)
      {
-         LCD_enuSendCmnd(0X40 + (Copy_u8Location *8));
-         for (u8 i = 0; i < 8; i++)
+         LCD_enuSendCmnd(ADDRESS_OF_CGRAM + (Copy_u8Location *MAX_CHARACTERS));
+         for (u8 Local_u8_Counter = 0; Local_u8_Counter < MAX_CHARACTERS; Local_u8_Counter++)
          {
-             LCD_enuSendChar(Copy_pu8CharArray[i]);
+             LCD_enuSendChar(Copy_pu8CharArray[Local_u8_Counter]);
          }
-        // LCD_enuSetAc(1,0);
+        LCD_enuSetAc(LCD_u8_LINE1,0);
          return STD_OK;
      }
      else
@@ -210,11 +225,3 @@
          return STD_NOTOK;
          }
  }
-
- /*****************************************************/
- ERROR LCD_enuSendCharPos(u8 c, u8 row, u8 column)
- {
-     LCD_enuSetAc(row, column);
-     LCD_enuSendChar(c);
- }
-
