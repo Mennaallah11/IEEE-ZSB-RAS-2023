@@ -12,8 +12,9 @@
 
 /*MCAL*/
 #include "GI_private.h"
+#include "../AVR_REG.h"
 
-#define SREG  	*((volatile u8*)0x5F)
+
 
 //#include "GI_interface.h"
 
@@ -35,5 +36,4 @@ ERROR  GI_enuInit(void)
 	CLR_BIT(SREG,GI_PIN7);
 	return STD_OK;
 }
-
 
