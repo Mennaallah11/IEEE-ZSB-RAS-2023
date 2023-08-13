@@ -5,8 +5,8 @@
 /*************  Version : 1.0 ************/
 /*****************************************/
 
-#ifndef DIO_INTERFACE_H
-#define DIO_INTERFACE_H
+#ifndef LCD_INTERFACE_H
+#define LCD_INTERFACE_H
 
 
 ERROR LCD_enuInit(void);
