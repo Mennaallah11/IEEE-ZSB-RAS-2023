@@ -5,8 +5,6 @@
 /*************  Version : 1.0 ************/
 /*****************************************/
 
-
-
 /*Lib Layer*/
 #include "../../Lib/STD_TYPES.h"
 #include "../../Lib/ES.h"
@@ -82,20 +80,20 @@ ERROR KPD_enuGetKeyState(u8 *copy_pu8ReturnedKey){
 	
 	ERROR KPD_enuInit(void)
 	{
-		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c1_PIN, DIO_u8OUTPUT);
-		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c2_PIN, DIO_u8OUTPUT);
-		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c3_PIN, DIO_u8OUTPUT);
-		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c4_PIN, DIO_u8OUTPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c1_PIN, DIO_u8INPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c2_PIN, DIO_u8INPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c3_PIN, DIO_u8INPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_c4_PIN, DIO_u8INPUT);
 
 		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_c1_PIN, DIO_u8HIGH);
 		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_c2_PIN, DIO_u8HIGH);
 		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_c3_PIN, DIO_u8HIGH);
 		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_c4_PIN, DIO_u8HIGH);
 
-		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R1_PIN, DIO_u8FLOAT);
-		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R2_PIN, DIO_u8FLOAT);
-		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R3_PIN, DIO_u8FLOAT);
-		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R4_PIN, DIO_u8FLOAT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R1_PIN, DIO_u8OUTPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R2_PIN, DIO_u8OUTPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R3_PIN, DIO_u8OUTPUT);
+		DIO_enuSetPinDirection(KPD_u8_PORT, KPD_u8_R4_PIN, DIO_u8OUTPUT);
 
 		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_R1_PIN, DIO_u8HIGH);
 		DIO_enuSetPinValue(KPD_u8_PORT, KPD_u8_R2_PIN, DIO_u8HIGH);
