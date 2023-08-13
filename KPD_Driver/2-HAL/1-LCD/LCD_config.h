@@ -5,8 +5,8 @@
 /*************  Version : 1.0 ************/
 /*****************************************/
 
-#ifndef DIO_CONFIG_H
-#define DIO_CONFIG_H
+#ifndef LCD_CONFIG_H
+#define LCD_CONFIG_H
 
 
 /*Options for Ports: 1- DIO_u8_PORTA
