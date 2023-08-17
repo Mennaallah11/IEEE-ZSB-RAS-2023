@@ -25,12 +25,15 @@ ERROR Timers_enuTimer0Init(void)
 	#if MODE == NORMAL_MODE
 		CLR_BIT(TCCR0, WGM00);
 		CLR_BIT(TCCR0, WGM01);
+	        /* Set preload value */
+	       TCNT0 = preload_value;
 	#elif MODE == PWM_OR_PHASE_COTROL
 		SET_BIT(TCCR0, WGM00);
 		CLR_BIT(TCCR0, WGM01);
 	#elif MODE == CTC_MODE
 		CLR_BIT(TCCR0, WGM00);
-		SET_BIT(TCCR0, WGM01);
+		SET_BIT(TCCR0, WGM01);\
+	        OCR0 = zero ; 
 	#elif MODE == FAST_PWM_MODE
 		SET_BIT(TCCR0, WGM00);
 		SET_BIT(TCCR0, WGM01);
@@ -42,11 +45,7 @@ ERROR Timers_enuTimer0Init(void)
 	#elif INTERRUPT == INTERRUPT_CTC
 		SET_BIT(TIMSK, OCIE0);
 	#endif
-	OCR0 = 99 ; 
 
-	/* Set preload value */
-	TCNT0 = preload_value;
-	
 	/* Set prescaler value */
 	#if prescaler == No_Clock_source
 	   CLR_BIT(TCCR0,CS02);
@@ -115,6 +114,13 @@ ERROR Timers_enuTimer0CTCSetCallBack(void(*Copy_pf)(void))
 void __vector_11(void)	__attribute__((signal));
 void __vector_11(void)
 {
+	if ((prescaler == EXTERNAL_RISING_EDGE ) || ( prescaler == EXTERNAL_FALLING_EDGE))
+	{
+		if(Timer0_pftimer0OVF != NULL)
+		{
+			Timer0_pftimer0OVF();
+		}
+	}
 	static u16 Local_u16CounterOvf = 0;
 	Local_u16CounterOvf++;
 	if(Local_u16CounterOvf == overflows)
@@ -134,6 +140,13 @@ void __vector_11(void)
 void __vector_10(void)	__attribute__((signal));
 void __vector_10(void)
 {
+	if ((prescaler == EXTERNAL_RISING_EDGE ) || ( prescaler == EXTERNAL_FALLING_EDGE))
+	{
+		if(Timer0_pftimer0CTC != NULL)
+		{
+			Timer0_pftimer0CTC();
+		}
+	}
 	static u16 Local_u16CounterCTC = 0;
 	Local_u16CounterCTC++;
 	if(Local_u16CounterCTC == CTC)
