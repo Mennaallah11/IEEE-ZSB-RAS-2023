@@ -33,7 +33,7 @@ ERROR Timers_enuTimer0Init(void)
 	#elif MODE == CTC_MODE
 		CLR_BIT(TCCR0, WGM00);
 		SET_BIT(TCCR0, WGM01);\
-	        OCR0 = zero ; 
+	        OCR0 = zero  ; 
 	#elif MODE == FAST_PWM_MODE
 		SET_BIT(TCCR0, WGM00);
 		SET_BIT(TCCR0, WGM01);
