@@ -42,7 +42,7 @@
               6- EXTERNAL_FALLING_EDGE
               7- EXTERNAL_RISING_EDGE
 */
-#define prescaler  EXTERNAL_RISING_EDGE
+#define prescaler  EXTERNAL_FALLING_EDGE
 
 
 
