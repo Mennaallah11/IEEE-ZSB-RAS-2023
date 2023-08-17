@@ -33,6 +33,7 @@
 #define CS00				 0
 #define CS01				 1
 #define CS02				 2
+#define zero                 0 
 
 
 
