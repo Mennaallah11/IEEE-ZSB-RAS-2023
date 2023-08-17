@@ -13,7 +13,7 @@ int main()
 {
 	
 	LCD_enuInit();
-    DIO_enuInit();
+        DIO_enuInit();
 	GI_enuGIEnable();
 	Timers_enuTimer0CTCSetCallBack(&App_voidTogLed);
 	Timers_enuTimer0Init();
@@ -23,20 +23,22 @@ int main()
 }
 void App_voidTogLed(void)
 {
-	static u8 flag = 0 , count =0 ;
+	
+	static u8 flag = 0 ,count =0  ;
+	
 	count++;
+	LCD_enuSetAc(1,0);
 	LCD_enuSendNum(count);
+
 	if(flag==0)
 	{
-		DIO_enuSetPinValue(DIO_u8PORTB,DIO_u8PIN1, DIO_u8HIGH);
+		DIO_enuSetPinValue(DIO_u8PORTB,DIO_u8PIN2, DIO_u8HIGH);
 		flag =1 ;
 	}
 	else 
 	{
-		DIO_enuSetPinValue(DIO_u8PORTB,DIO_u8PIN1, DIO_u8LOW);
+		DIO_enuSetPinValue(DIO_u8PORTB,DIO_u8PIN2, DIO_u8LOW);
 		flag =0 ;
 	}
+
 }
-
-
-
