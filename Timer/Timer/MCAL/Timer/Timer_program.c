@@ -121,6 +121,8 @@ void __vector_11(void)
 			Timer0_pftimer0OVF();
 		}
 	}
+	else
+	{	
 	static u16 Local_u16CounterOvf = 0;
 	Local_u16CounterOvf++;
 	if(Local_u16CounterOvf == overflows)
@@ -134,7 +136,7 @@ void __vector_11(void)
 		{
 			Timer0_pftimer0OVF();
 		}
-	}
+	}}
 }
 /*************************************/
 void __vector_10(void)	__attribute__((signal));
@@ -147,6 +149,8 @@ void __vector_10(void)
 			Timer0_pftimer0CTC();
 		}
 	}
+	else
+	{
 	static u16 Local_u16CounterCTC = 0;
 	Local_u16CounterCTC++;
 	if(Local_u16CounterCTC == CTC)
@@ -158,7 +162,7 @@ void __vector_10(void)
 		{
 			Timer0_pftimer0CTC();
 		}
-	}
+	}}
 }
 
 
