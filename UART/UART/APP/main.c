@@ -21,6 +21,7 @@ int main()
 	
 	while(1)
 	{
+		UART_enuSendString("Choose a or b or y or s");
 		UART_enuResiveDataByte(&Data);
 		if(Data == 'a')
 		{
