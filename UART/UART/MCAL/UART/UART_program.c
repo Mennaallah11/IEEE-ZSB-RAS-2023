@@ -120,5 +120,14 @@ ERROR UART_enuResiveDataByte(u8 *copy_pu8recive )
 	
 	return STD_OK;
 }
+/**************************************/
+ERROR UART_enuSendString(u8 * Copy_pu8String)
+ {
+	 for(u8 i ; Copy_pu8String[i] != '\0' ; i++ ){
+		 UART_enuSendDataByte(Copy_pu8String[i]);
+	 }
+	 return  STD_OK;
+ }
+
 
 
