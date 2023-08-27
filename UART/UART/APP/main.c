@@ -24,41 +24,41 @@ int main()
 	while(1)
 	{
 
-        UART_enuSendString("Choose a or b or y or s or g");*/
+        UART_enuSendString("Choose a or b or y or s or g");
 		UART_enuResiveDataByte(&Data);
         if(Data == 'a')
-		{
-			DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN0,DIO_u8HIGH);
-		}
-		else if (Data == 'b')
-		{
-			DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN1,DIO_u8HIGH);
-	    }	
-	    else if (Data == 'y')
-	    {
-			DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN2,DIO_u8HIGH);
-	    }
+	{
+		DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN0,DIO_u8HIGH);
+	}
+	else if (Data == 'b')
+	{
+		DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN1,DIO_u8HIGH);
+	 }	
+	else if (Data == 'y')
+	{
+		DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN2,DIO_u8HIGH);
+	 }
 	
-		else if (Data =='g')
+	else if (Data =='g')
+	{
+		UART_enuSendString("enter the string");
+		UART_enuRecieveString(st);
+		if(strcmp(st,"abca"))
 		{
-			UART_enuSendString("enter the string");
-			UART_enuRecieveString(st);
-			if(strcmp(st,"abca"))
-			{
-				 DIO_enuSetPinValue(DIO_u8PORTD,DIO_u8PIN2,DIO_u8HIGH);
-			}
-		   else
-		   {
-             UART_enuSendString("ERROR");
+			 DIO_enuSetPinValue(DIO_u8PORTD,DIO_u8PIN2,DIO_u8HIGH);
+		}
+		else
+		{
+                      UART_enuSendString("ERROR");
 	    	}
-		}
-		else if (Data == 's')
-		{
-			DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN0,DIO_u8LOW);
-			DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN1,DIO_u8LOW);
-			DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN2,DIO_u8LOW);
-			DIO_enuSetPinValue(DIO_u8PORTD,DIO_u8PIN2,DIO_u8LOW);
-		}
+	}
+	else if (Data == 's')
+	{
+		DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN0,DIO_u8LOW);
+		DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN1,DIO_u8LOW);
+		DIO_enuSetPinValue(DIO_u8PORTA,DIO_u8PIN2,DIO_u8LOW);
+		DIO_enuSetPinValue(DIO_u8PORTD,DIO_u8PIN2,DIO_u8LOW);
+	}
  
 
 		
